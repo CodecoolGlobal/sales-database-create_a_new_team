@@ -1,5 +1,6 @@
 CREATE TYPE quarter_year AS ENUM (1,2,3,4);
 CREATE TYPE deal_size AS ENUM ('Small', 'Medium', 'Large');
+CREATE TYPE status AS ENUM ('In Process', 'Disputed', 'Shipped', 'Cancelled', 'On Hold', 'Resolved');
 
 CREATE TABLE orderdates (
     QTR_id quarter_year PRIMARY KEY,
@@ -36,5 +37,28 @@ CREATE TABLE productline (
     productline_name varchar(255)
 );
 
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    customer_name text,
+    phone_number varchar(255),
+    address_id int REFERENCES customer_address, --?????
+    contactname_id int REFERENCES contactnames --????
+);
 
+CREATE TABLE orders (
+    order_number int PRIMARY KEY,
+    order_date date,
+    orderdate_id int REFERENCES orderdates, --????
+    status status,
+    customer_id int REFERENCES customers --????
+);
 
+CREATE TABLE order_items (
+    order_number int REFERENCES orders, --?????
+    product_code int REFERENCES products, --?????
+    quantity int,
+    sales float, -- price * quantity
+    productline_id int REFERENCES productline, --????
+    dealsize deal_size,
+    orderline int
+);
