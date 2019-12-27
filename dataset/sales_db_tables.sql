@@ -58,8 +58,7 @@ CREATE TABLE order_items (
     quantity_ordered int,
     sales decimal, -- price * quantity
     productline_id int REFERENCES productline(productline_id),
-    dealsize deal_size,
-    orderline_number int
+    dealsize deal_size
 );
 
 CREATE INDEX ON orderdates (QTR_id);
