@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS orderdates;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS customer_address;
+DROP TABLE IF EXISTS contactnames;
+DROP TABLE IF EXISTS productline;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS order_items;
+DROP TYPE IF EXISTS quarter_year;
+DROP TYPE IF EXISTS deal_size;
+DROP TYPE IF EXISTS status;
+DROP INDEX IF EXISTS qtr_index;
+DROP INDEX IF EXISTS month_index;
+DROP INDEX IF EXISTS year_index;
+
+
 CREATE TYPE quarter_year AS ENUM (1,2,3,4);
 CREATE TYPE deal_size AS ENUM ('Small', 'Medium', 'Large');
 CREATE TYPE status AS ENUM ('In Process', 'Disputed', 'Shipped', 'Cancelled', 'On Hold', 'Resolved');
@@ -61,6 +77,6 @@ CREATE TABLE order_items (
     dealsize deal_size
 );
 
-CREATE INDEX ON orderdates (QTR_id);
-CREATE INDEX ON orderdates (month_id);
-CREATE INDEX ON orderdates (year_id);
+CREATE INDEX qtr_index ON orderdates (QTR_id);
+CREATE INDEX month_index ON orderdates (month_id);
+CREATE INDEX year_index ON orderdates (year_id);
