@@ -22,3 +22,8 @@ ON temp_all_sales.productline = productline.productline_name;
 INSERT INTO customer_address (addressline_1, addressline_2, city, state, postalcode, country, territory)
 SELECT DISTINCT addressline1, addressline2, city, state, postal_code, country, territory
 FROM temp_all_sales;
+
+-- Data inserted to contactnames
+
+INSERT INTO contactnames (lastname, firstname)
+SELECT DISTINCT contact_lastname, contact_firstname FROM temp_all_sales;
