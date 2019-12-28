@@ -9,3 +9,10 @@ SELECT TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYY
 
 INSERT INTO productline (productline_name)
 SELECT DISTINCT productline FROM temp_all_sales;
+
+-- Data inserted to products
+
+INSERT INTO products
+SELECT DISTINCT product_code, CAST(msrp AS integer), productline_id
+FROM temp_all_sales JOIN productline
+ON temp_all_sales.productline = productline.productline_name;
