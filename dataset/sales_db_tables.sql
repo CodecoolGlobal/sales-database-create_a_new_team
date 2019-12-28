@@ -27,8 +27,8 @@ CREATE TABLE orderdates (
 
 CREATE TABLE products (
     product_code varchar(255) PRIMARY KEY,
-    product_price decimal,
-    MSRP int
+    MSRP int,
+    productline_id int REFERENCES productline(productline_id)
 );
 
 CREATE TABLE customer_address (
@@ -53,6 +53,12 @@ CREATE TABLE productline (
     productline_name varchar(255)
 );
 
+CREATE TABLE product_prices (
+    product_code varchar(255) REFERENCES products(product_code),
+    orderdates_id date REFERENCES orderdates(orderdates_id),
+    price decimal
+);
+
 CREATE TABLE customers (
     customer_id SERIAL PRIMARY KEY,
     customer_name text,
@@ -73,7 +79,6 @@ CREATE TABLE order_items (
     product_code varchar(255) REFERENCES products(product_code),
     quantity_ordered int,
     sales decimal, -- price * quantity
-    productline_id int REFERENCES productline(productline_id),
     dealsize deal_size
 );
 
