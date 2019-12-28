@@ -26,4 +26,12 @@ FROM temp_all_sales;
 -- Data inserted to contactnames
 
 INSERT INTO contactnames (lastname, firstname)
-SELECT DISTINCT contact_lastname, contact_firstname FROM temp_all_sales;
+SELECT DISTINCT contact_lastname, contact_firstname
+FROM temp_all_sales;
+
+-- Data inserted to product_prices
+
+INSERT INTO product_prices
+SELECT DISTINCT product_code, TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYYY'), CAST(price_each AS decimal)
+FROM temp_all_sales;
+
