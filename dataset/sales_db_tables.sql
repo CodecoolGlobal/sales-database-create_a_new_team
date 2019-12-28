@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS customer_address;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS orderdates;
 DROP TABLE IF EXISTS productline;
+DROP TABLE IF EXISTS product_prices;
 DROP TYPE IF EXISTS quarter_year;
 DROP TYPE IF EXISTS deal_size;
 DROP TYPE IF EXISTS status;
