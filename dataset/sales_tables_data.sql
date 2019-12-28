@@ -16,3 +16,9 @@ INSERT INTO products
 SELECT DISTINCT product_code, CAST(msrp AS integer), productline_id
 FROM temp_all_sales JOIN productline
 ON temp_all_sales.productline = productline.productline_name;
+
+-- Data inserted to customer_address
+
+INSERT INTO customer_address (addressline_1, addressline_2, city, state, postalcode, country, territory)
+SELECT DISTINCT addressline1, addressline2, city, state, postal_code, country, territory
+FROM temp_all_sales;
