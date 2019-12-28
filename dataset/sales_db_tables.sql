@@ -5,8 +5,8 @@ DROP TABLE IF EXISTS contactnames;
 DROP TABLE IF EXISTS customer_address;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS orderdates;
-DROP TABLE IF EXISTS productline;
 DROP TABLE IF EXISTS product_prices;
+DROP TABLE IF EXISTS productline;
 DROP TYPE IF EXISTS quarter_year;
 DROP TYPE IF EXISTS deal_size;
 DROP TYPE IF EXISTS status;
@@ -24,6 +24,11 @@ CREATE TABLE orderdates (
     QTR_id quarter_year NOT NULL ,
     month_id int NOT NULL,
     year_id int NOT NULL
+);
+
+CREATE TABLE productline (
+    productline_id SERIAL PRIMARY KEY,
+    productline_name varchar(255)
 );
 
 CREATE TABLE products (
@@ -47,11 +52,6 @@ CREATE TABLE contactnames (
     contactname_id SERIAL PRIMARY KEY,
     lastname text,
     firstname text
-);
-
-CREATE TABLE productline (
-    productline_id SERIAL PRIMARY KEY,
-    productline_name varchar(255)
 );
 
 CREATE TABLE product_prices (
