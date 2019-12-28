@@ -1,11 +1,11 @@
-DROP TABLE IF EXISTS orderdates;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS customer_address;
-DROP TABLE IF EXISTS contactnames;
-DROP TABLE IF EXISTS productline;
-DROP TABLE IF EXISTS customers;
-DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS contactnames;
+DROP TABLE IF EXISTS customer_address;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS orderdates;
+DROP TABLE IF EXISTS productline;
 DROP TYPE IF EXISTS quarter_year;
 DROP TYPE IF EXISTS deal_size;
 DROP TYPE IF EXISTS status;
@@ -14,7 +14,7 @@ DROP INDEX IF EXISTS month_index;
 DROP INDEX IF EXISTS year_index;
 
 
-CREATE TYPE quarter_year AS ENUM (1,2,3,4);
+CREATE TYPE quarter_year AS ENUM ('1','2','3','4');
 CREATE TYPE deal_size AS ENUM ('Small', 'Medium', 'Large');
 CREATE TYPE status AS ENUM ('In Process', 'Disputed', 'Shipped', 'Cancelled', 'On Hold', 'Resolved');
 
@@ -70,7 +70,7 @@ CREATE TABLE orders (
 
 CREATE TABLE order_items (
     order_number int REFERENCES orders(order_number),
-    product_code int REFERENCES products(product_code),
+    product_code varchar(255) REFERENCES products(product_code),
     quantity_ordered int,
     sales decimal, -- price * quantity
     productline_id int REFERENCES productline(productline_id),
