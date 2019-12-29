@@ -7,17 +7,15 @@ DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS orderdates;
 DROP TABLE IF EXISTS product_prices;
 DROP TABLE IF EXISTS productline;
+DROP TABLE IF EXISTS dealsize;
+DROP TABLE IF EXISTS order_status;
 DROP TYPE IF EXISTS quarter_year;
-DROP TYPE IF EXISTS deal_size;
-DROP TYPE IF EXISTS status;
 DROP INDEX IF EXISTS qtr_index;
 DROP INDEX IF EXISTS month_index;
 DROP INDEX IF EXISTS year_index;
 
 
 CREATE TYPE quarter_year AS ENUM ('1','2','3','4');
-CREATE TYPE deal_size AS ENUM ('Small', 'Medium', 'Large');
-CREATE TYPE status AS ENUM ('In Process', 'Disputed', 'Shipped', 'Cancelled', 'On Hold', 'Resolved');
 
 CREATE TABLE orderdates (
     orderdates_id date PRIMARY KEY,
@@ -29,6 +27,16 @@ CREATE TABLE orderdates (
 CREATE TABLE productline (
     productline_id SERIAL PRIMARY KEY,
     productline_name varchar(255)
+);
+
+CREATE TABLE dealsize (
+    dealsize_id SERIAL PRIMARY KEY,
+    dealsize varchar(255)
+);
+
+CREATE TABLE order_status (
+    status_id SERIAL PRIMARY KEY,
+    status varchar(255)
 );
 
 CREATE TABLE products (
@@ -71,7 +79,7 @@ CREATE TABLE customers (
 CREATE TABLE orders (
     order_number int PRIMARY KEY,
     orderdates_id date REFERENCES orderdates(orderdates_id),
-    status status,
+    status_id int REFERENCES order_status(status_id),
     customer_id int REFERENCES customers(customer_id)
 );
 
@@ -80,7 +88,7 @@ CREATE TABLE order_items (
     product_code varchar(255) REFERENCES products(product_code),
     quantity_ordered int,
     sales decimal, -- price * quantity
-    dealsize deal_size
+    dealsize_id int REFERENCES dealsize(dealsize_id)
 );
 
 CREATE INDEX qtr_index ON orderdates (QTR_id);

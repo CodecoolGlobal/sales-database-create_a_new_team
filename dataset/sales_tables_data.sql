@@ -49,3 +49,12 @@ FROM temp_all_sales
     JOIN contactnames
     ON contactnames.lastname = temp_all_sales.contact_lastname
     AND contactnames.firstname = temp_all_sales.contact_firstname;
+
+-- Data inserted to dealsize
+
+-- Data inserted to order_status
+
+-- Data inserted to orders
+
+-- Data inserted to order_details
+
