@@ -47,8 +47,8 @@ FROM temp_all_sales
         AND customer_address.city = temp_all_sales.city
         AND customer_address.country = temp_all_sales.country
     JOIN contactnames
-    ON contactnames.lastname = temp_all_sales.contact_lastname
-    AND contactnames.firstname = temp_all_sales.contact_firstname;
+        ON contactnames.lastname = temp_all_sales.contact_lastname
+        AND contactnames.firstname = temp_all_sales.contact_firstname;
 
 -- Data inserted to dealsize
 
@@ -59,9 +59,18 @@ INSERT INTO dealsize VALUES ('Large');
 -- Data inserted to order_status
 
 INSERT INTO order_status (status)
-SELECT DISTINCT status FROM temp_all_sales;
+SELECT DISTINCT status
+FROM temp_all_sales;
 
 -- Data inserted to orders
+
+INSERT INTO orders
+SELECT DISTINCT CAST(order_number AS integer), TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYYY'), status_id, customer_id
+FROM temp_all_sales
+    JOIN order_status
+        ON order_status.status = temp_all_sales.status
+    JOIN customers
+        ON customers.customer_name = temp_all_sales.customer_name;
 
 -- Data inserted to order_details
 
