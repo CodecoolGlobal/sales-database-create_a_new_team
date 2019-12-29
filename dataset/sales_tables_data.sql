@@ -74,3 +74,9 @@ FROM temp_all_sales
 
 -- Data inserted to order_details
 
+INSERT INTO order_details
+SELECT DISTINCT CAST(order_number AS integer), product_code, CAST(quantity_ordered AS integer), CAST(sales AS decimal), dealsize_id
+FROM temp_all_sales
+    JOIN dealsize
+        ON temp_all_sales.dealsize = dealsize.dealsize;
+
