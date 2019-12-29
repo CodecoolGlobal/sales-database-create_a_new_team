@@ -52,6 +52,10 @@ FROM temp_all_sales
 
 -- Data inserted to dealsize
 
+INSERT INTO dealsize VALUES ('Small');
+INSERT INTO dealsize VALUES ('Medium');
+INSERT INTO dealsize VALUES ('Large');
+
 -- Data inserted to order_status
 
 -- Data inserted to orders
