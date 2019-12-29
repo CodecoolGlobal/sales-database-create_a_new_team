@@ -8,14 +8,16 @@ SELECT TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYY
 -- Data inserted to productline
 
 INSERT INTO productline (productline_name)
-SELECT DISTINCT productline FROM temp_all_sales;
+SELECT DISTINCT productline
+FROM temp_all_sales;
 
 -- Data inserted to products
 
 INSERT INTO products
 SELECT DISTINCT product_code, CAST(msrp AS integer), productline_id
-FROM temp_all_sales JOIN productline
-ON temp_all_sales.productline = productline.productline_name;
+FROM temp_all_sales
+    JOIN productline
+        ON temp_all_sales.productline = productline.productline_name;
 
 -- Data inserted to customer_address
 
@@ -35,3 +37,15 @@ INSERT INTO product_prices
 SELECT DISTINCT product_code, TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYYY'), CAST(price_each AS decimal)
 FROM temp_all_sales;
 
+-- Data inserted to customers
+
+INSERT INTO customers (customer_name, phone_number, address_id, contactname_id)
+SELECT DISTINCT customer_name, phone, address_id, contactname_id
+FROM temp_all_sales
+    JOIN customer_address
+        ON customer_address.addressline_1 = temp_all_sales.addressline1
+        AND customer_address.city = temp_all_sales.city
+        AND customer_address.country = temp_all_sales.country
+    JOIN contactnames
+    ON contactnames.lastname = temp_all_sales.contact_lastname
+    AND contactnames.firstname = temp_all_sales.contact_firstname;
