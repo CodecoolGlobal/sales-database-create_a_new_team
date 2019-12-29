@@ -58,6 +58,9 @@ INSERT INTO dealsize VALUES ('Large');
 
 -- Data inserted to order_status
 
+INSERT INTO order_status (status)
+SELECT DISTINCT status FROM temp_all_sales;
+
 -- Data inserted to orders
 
 -- Data inserted to order_details
