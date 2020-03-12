@@ -40,9 +40,9 @@ $BODY$
     IF NEW.city <> OLD.city THEN
         INSERT INTO changes
         VALUES ((SELECT customers.customer_id FROM customers
-                    JOIN OLD
-                    ON customers.address_id = OLD.address_id
-                    WHERE customers.address_id = OLD.address_id), 'customer_address', 'city', OLD.city, now()); --choose customer_id
+                    JOIN customer_address
+                    ON customers.address_id = customer_address.address_id
+                    WHERE customers.address_id = OLD.address_id),'customer_address', 'city', OLD.city, now()); --choose customer_id
     END IF;
     RETURN NEW;
     END;
@@ -64,8 +64,8 @@ $BODY$
     IF NEW.firstname <> OLD.firstname THEN
         INSERT INTO changes
         VALUES ((SELECT customers.customer_id FROM customers
-                    JOIN OLD
-                    ON customers.contactname_id = OLD.contactname_id
+                    JOIN contactnames
+                    ON customers.contactname_id = contactnames.contactname_id
                     WHERE customers.contactname_id = OLD.contactname_id), 'contactnames', 'firstname', OLD.firstname, now()); --choose customer_id
     END IF;
     RETURN NEW;
@@ -87,8 +87,8 @@ $BODY$
     IF NEW.lastname <> OLD.lastname THEN
         INSERT INTO changes
         VALUES ((SELECT customers.customer_id FROM customers
-                    JOIN OLD
-                    ON customers.contactname_id = OLD.contactname_id
+                    JOIN contactnames
+                    ON customers.contactname_id = contactnames.contactname_id
                     WHERE customers.contactname_id = OLD.contactname_id), 'contactnames', 'lastname', OLD.lastname, now()); --choose customer_id
     END IF;
     RETURN NEW;
@@ -101,4 +101,3 @@ CREATE TRIGGER last_name_changes
     ON contactnames
     FOR EACH ROW
     EXECUTE PROCEDURE log_last_name_changes();
-
