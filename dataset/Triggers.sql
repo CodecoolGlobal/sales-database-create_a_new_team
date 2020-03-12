@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS changes;
 -- New table for customer-related changes, including address and contact name
 
 CREATE TABLE changes (
@@ -20,7 +21,9 @@ $BODY$
     END IF;
     RETURN NEW;
     END;
-    $BODY$;
+$BODY$
+LANGUAGE PLPGSQL;
+
 
 CREATE TRIGGER phone_number_changes
     BEFORE UPDATE
@@ -43,7 +46,8 @@ $BODY$
     END IF;
     RETURN NEW;
     END;
-    $BODY$;
+$BODY$
+LANGUAGE PLPGSQL;
 
 CREATE TRIGGER address_changes
     BEFORE UPDATE
@@ -66,7 +70,8 @@ $BODY$
     END IF;
     RETURN NEW;
     END;
-    $BODY$;
+$BODY$
+LANGUAGE PLPGSQL;
 
 CREATE TRIGGER first_name_changes
     BEFORE UPDATE
@@ -88,7 +93,8 @@ $BODY$
     END IF;
     RETURN NEW;
     END;
-    $BODY$;
+$BODY$
+LANGUAGE PLPGSQL;
 
 CREATE TRIGGER last_name_changes
     BEFORE UPDATE
