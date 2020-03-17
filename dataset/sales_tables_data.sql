@@ -21,7 +21,7 @@ FROM temp_all_sales
 
 -- Data inserted to customer_address
 
-INSERT INTO customer_address (addressline_1, addressline_2, city, state, postalcode, country, territory)
+INSERT INTO customer_address (addressline_1, addressline_2, city, state, postalCode, country, territory)
 SELECT DISTINCT addressline1, addressline2, city, state, postal_code, country, territory
 FROM temp_all_sales;
 
@@ -79,4 +79,3 @@ SELECT DISTINCT CAST(order_number AS integer), product_code, CAST(quantity_order
 FROM temp_all_sales
     JOIN dealsize
         ON temp_all_sales.dealsize = dealsize.dealsize;
-

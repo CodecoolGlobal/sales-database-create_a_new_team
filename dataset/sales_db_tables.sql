@@ -51,7 +51,7 @@ CREATE TABLE customer_address (
     addressline_2 text,
     city varchar(255),
     state varchar(255),
-    postalcode varchar(255),
+    postalCode varchar(255),
     country varchar(255),
     territory varchar(255)
 );
