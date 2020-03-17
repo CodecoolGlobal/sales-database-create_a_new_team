@@ -3,51 +3,77 @@ package com.codecool.zsana.salesdb;
 public class Main {
 
     public static void main(String[] args) {
-        //TODO
+        addNewOrderToExistingCustomer();
+        addNewOrderToNewCustomer();
+        changePhoneNumber();
+        changeCity();
+        changeContactName();
     }
 
     // new order from existing customer
 
-    private static void addNewOrderExistingCustomer(int times) {
-        // add new order - get back order_id from this method
-        // add the date to the orderdates - get it using the order_id
-        /* for x : times - random 1-3
-        add new orderdetail to order for x times
-         */
+    private static void addNewOrderToExistingCustomer() {
+        int customerId = RandomData.chooseCustomerId();
+        newOrder(customerId);
     }
 
     // new order from new customer
 
-    private static void addNewOrderAndNewCustomer(int times) {
-        // contactname
-        // first add address to have address_id for a new customer
-        // second add new customer to have their customer_id!
-        // then: see above
+    private static void addNewOrderToNewCustomer() {
+        String lastname = RandomData.generateLastName();
+        String firstName = RandomData.generateFirstName();
+        int contactNameId = RandomData.getQuery().insertToContactNames(new ContactName(firstName, lastname));
+        String line1 = RandomData.generateAddressLine();
+        String city = RandomData.generateCity();
+        String postalCode = RandomData.generatePostalCode();
+        String country = RandomData.generateCountry();
+        int customerAddressId = RandomData.getQuery().insertToCustomerAddress(new Address(line1, city, postalCode, country));
+        String customerName = RandomData.generateCustomerName();
+        String phoneNumber = RandomData.generatePhoneNumber();
+        int customerId = RandomData.getQuery().insertIntoCustomers(new Customer(customerName, phoneNumber, customerAddressId, contactNameId));
+        newOrder(customerId);
+    }
+    private static void newOrder(int customerId) {
+        int orderStatus = 4; // default: In process
+        OrderDate orderdate = new OrderDate();
+        RandomData.getQuery().insertToOrderDates(orderdate);
+        Order newOrder = new Order(orderdate, orderStatus, customerId);
+        int orderNumber = RandomData.getQuery().insertToOrders(newOrder);
+        System.out.println("OrderNumber: " + orderNumber);
+        String productCode = RandomData.chooseProductCode();
+        double productPrice = RandomData.generateProductPrice();
+        int quantity = RandomData.chooseQuantity();
+        OrderDetails details = new OrderDetails(orderNumber, productCode, quantity, productPrice);
+        RandomData.getQuery().insertToOrderDetails(details);
+        ProductPrice price = new ProductPrice(productCode, orderdate, productPrice);
+        RandomData.getQuery().insertToProductPrices(price);
     }
 
-    // change the phone number - choose random id, and change its phone
+    // choose random id, and change its phone
 
-    private static void changePhoneNumber(String phoneNumber) {
-        // choose id
-        // change phone
+    private static void changePhoneNumber() {
+        int customerId = RandomData.chooseCustomerId();
+        String newPhone = RandomData.generatePhoneNumber();
+        RandomData.getQuery().changePhoneNumber(customerId, newPhone);
     }
 
     // change city name in address
 
-    private static void changeCity(String city) {
-        // choose random id of address
-        // change city name
+    private static void changeCity() {
+        int customerId = RandomData.chooseCustomerId();
+        String newCity = RandomData.generateCity();
+        System.out.println(customerId);
+        System.out.println(newCity);
+        RandomData.getQuery().changeCity(customerId, newCity);
     }
+
     // change lastname, firstname in contactnames
 
-    private static void changeContactName(String lastName, String firstName) {
-        // choose random contactnames_id from contactnames
-        // change both last- and firstname
+    private static void changeContactName() {
+        int customerId = RandomData.chooseCustomerId();
+        String lastName = RandomData.generateLastName();
+        String firstName = RandomData.generateFirstName();
+        RandomData.getQuery().changeContactName(customerId, lastName, firstName);
     }
 
-
-
 }
-
-
-

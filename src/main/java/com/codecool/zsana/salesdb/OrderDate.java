@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.time.LocalDate;
 
-public class Orderdate {
+class OrderDate {
 
     private int year;
     private int month;
@@ -14,7 +14,7 @@ public class Orderdate {
     private QuarterYear quarterYear;
 
     // date given as today
-    Orderdate() {
+    OrderDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate localDate = LocalDate.now();
         this.date = java.sql.Date.valueOf(localDate);
@@ -33,23 +33,24 @@ public class Orderdate {
         }
     }
 
-    public Date getDate() {
+    Date getDate() {
         return this.date;
     }
 
-    public int getYear() {
+    int getYear() {
         return year;
     }
 
-    public int getMonth() {
+    int getMonth() {
         return month;
     }
 
-    public int getDay() {
+    int getDay() {
         return day;
     }
 
-    public QuarterYear getQuarterYear() {
+    QuarterYear getQuarterYear() {
         return quarterYear;
     }
+
 }

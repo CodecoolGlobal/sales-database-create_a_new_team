@@ -1,15 +1,15 @@
 package com.codecool.zsana.salesdb;
 
-public class OrderDetails {
+class OrderDetails {
 
     private int orderNumber;
     private String productCode;
     private int quantity;
-    private int sales;
+    private double sales;
     private int dealSizeId;
-    private int productPrice;
+    private double productPrice;
 
-    OrderDetails(int orderNumber, String productCode, int quantity, int productPrice) {
+    OrderDetails(int orderNumber, String productCode, int quantity, double productPrice) {
         this.orderNumber = orderNumber;
         this.productCode = productCode;
         this.quantity = quantity;
@@ -24,27 +24,28 @@ public class OrderDetails {
         }
     }
 
-    public int getOrderNumber() {
+    int getOrderNumber() {
         return orderNumber;
     }
 
-    public String getProductCode() {
+    String getProductCode() {
         return productCode;
     }
 
-    public int getQuantity() {
+    int getQuantity() {
         return quantity;
     }
 
-    public int getSales() {
+    double getSales() {
         return sales;
     }
 
-    public int getProductPrice() {
+    double getProductPrice() {
         return productPrice;
     }
 
-    public int getDealSizeId() {
+    int getDealSizeId() {
         return dealSizeId;
     }
+
 }

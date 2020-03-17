@@ -1,6 +1,6 @@
 package com.codecool.zsana.salesdb;
 
-public class Customer {
+class Customer {
 
     private int customerId;
     private String customerName;
@@ -15,30 +15,28 @@ public class Customer {
         this.contactNameId = contactNameId;
     }
 
-    public int getCustomerId() {
+    int getCustomerId() {
         return customerId;
     }
 
-    public String getCustomerName() {
+    String getCustomerName() {
         return customerName;
     }
 
-    public String getPhoneNumber() {
+    String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public int getAddressId() {
+    int getAddressId() {
         return addressId;
     }
 
-    public int getContactNameId() {
+    int getContactNameId() {
         return contactNameId;
     }
 
-    public void setCustomerId(int customerId) {
+    void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
-
-
 
 }
