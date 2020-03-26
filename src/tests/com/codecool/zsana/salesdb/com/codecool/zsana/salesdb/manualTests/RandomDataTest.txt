@@ -1,0 +1,25 @@
+One-time testing if Faker class used in RandomData is working as it should be - only manual tests
+
+PASSED:
+generateLastName(): check if last name is a name which can be inserted into the database
+
+PASSED:
+generateFirstName(): check if first name is a name which can be inserted into the database
+
+PASSED:
+generateCustomerName(): check if customer name is a name which can be inserted into the database
+
+PASSED:
+generateAddressLine(): check if address can be inserted into the database
+
+PASSED:
+generateCity(): check if city can be inserted into the database
+
+PASSED:
+generatePostalCode(): check if postal code can be inserted into the database
+
+PASSED:
+generateCountry(): check if country is a real country which can be inserted into the database
+
+PASSED:
+generatePhoneNumber(): check if phone number can be inserted into the database
