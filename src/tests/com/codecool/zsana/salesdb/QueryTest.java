@@ -1,13 +1,20 @@
 package com.codecool.zsana.salesdb;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-class QueryTest {
+class QueryTest extends BaseTest{
+
+    @BeforeEach
+    public void setup() {
+        setupConnection();
+    }
 
     @Test
     void getLastOrderNumber() {
+        Assertions.assertEquals(Integer.valueOf(40), getQuery().getLastOrderNumber());
     }
 
     @Test
@@ -24,10 +31,6 @@ class QueryTest {
 
     @Test
     void insertToCustomerAddress() {
-    }
-
-    @Test
-    void insertToContactNames() {
     }
 
     @Test

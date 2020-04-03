@@ -8,7 +8,6 @@ public class Main {
         Service.changePhoneNumber();
         Service.changeCity();
         Service.changeContactName();
-        //System.out.println(RandomData.generateCountry());
     }
 
 }

@@ -2,7 +2,6 @@ package com.codecool.zsana.salesdb;
 
 import com.github.javafaker.Faker;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -11,7 +10,6 @@ class RandomData {
     private static Query query = new Query();
     private static Random rand = new Random();
     private static Faker faker = new Faker();
-    private static DecimalFormat f = new DecimalFormat("#.##");
 
     static int chooseCustomerId() {
         List<Integer> ids = query.getCustomerIds();
@@ -33,12 +31,8 @@ class RandomData {
         return 1 + rand.nextInt((4 - 1) + 1);
     }
 
-    static String generateLastName() {
-        return faker.name().lastName();
-    }
-
-    static String generateFirstName() {
-       return faker.name().firstName();
+    static String generateContactName() {
+        return faker.name().lastName() + " " + faker.name().firstName();
     }
 
     static String generateCustomerName() {

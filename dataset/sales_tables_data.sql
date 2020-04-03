@@ -1,10 +1,3 @@
--- Data inserted to orderdates
-
-INSERT INTO orderdates
-SELECT TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYYY'),
-       CAST(qtr_id AS quarter_year), CAST(month_id AS integer),
-       CAST(year_id AS integer) FROM temp_all_sales ON CONFLICT DO NOTHING;
-
 -- Data inserted to productline
 
 INSERT INTO productline (productline_name)
@@ -25,12 +18,6 @@ INSERT INTO customer_address (addressline_1, addressline_2, city, state, postalC
 SELECT DISTINCT addressline1, addressline2, city, state, postal_code, country, territory
 FROM temp_all_sales;
 
--- Data inserted to contactnames
-
-INSERT INTO contactnames (lastname, firstname)
-SELECT DISTINCT contact_lastname, contact_firstname
-FROM temp_all_sales;
-
 -- Data inserted to product_prices
 
 INSERT INTO product_prices
@@ -39,16 +26,13 @@ FROM temp_all_sales;
 
 -- Data inserted to customers
 
-INSERT INTO customers (customer_name, phone_number, address_id, contactname_id)
-SELECT DISTINCT customer_name, phone, address_id, contactname_id
+INSERT INTO customers (customer_name, phone_number, address_id, contact_name)
+SELECT DISTINCT customer_name, phone, address_id, concat(contact_firstname, ' ', contact_lastname)
 FROM temp_all_sales
     JOIN customer_address
         ON customer_address.addressline_1 = temp_all_sales.addressline1
         AND customer_address.city = temp_all_sales.city
-        AND customer_address.country = temp_all_sales.country
-    JOIN contactnames
-        ON contactnames.lastname = temp_all_sales.contact_lastname
-        AND contactnames.firstname = temp_all_sales.contact_firstname;
+        AND customer_address.country = temp_all_sales.country;
 
 -- Data inserted to dealsize
 
@@ -64,8 +48,8 @@ FROM temp_all_sales;
 
 -- Data inserted to orders
 
-INSERT INTO orders
-SELECT DISTINCT CAST(order_number AS integer), TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYYY'), status_id, customer_id
+INSERT INTO orders (order_number, order_date, order_time, status_id, customer_id)
+SELECT DISTINCT CAST(order_number AS integer), TO_DATE(rtrim(substring(order_date, 1, length(order_date)-4)), 'MM/DD/YYYY'), localtime, status_id, customer_id
 FROM temp_all_sales
     JOIN order_status
         ON order_status.status = temp_all_sales.status

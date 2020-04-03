@@ -6,13 +6,13 @@ class Customer {
     private String customerName;
     private String phoneNumber;
     private int addressId;
-    private int contactNameId;
+    private String contactName;
 
-    Customer(String customerName, String phoneNumber, int addressId, int contactNameId) {
+    Customer(String customerName, String phoneNumber, int addressId, String contactName) {
         this.customerName = customerName;
         this.phoneNumber = phoneNumber;
         this.addressId = addressId;
-        this.contactNameId = contactNameId;
+        this.contactName = contactName;
     }
 
     int getCustomerId() {
@@ -31,8 +31,8 @@ class Customer {
         return addressId;
     }
 
-    int getContactNameId() {
-        return contactNameId;
+    String getContactName() {
+        return contactName;
     }
 
     void setCustomerId(int customerId) {

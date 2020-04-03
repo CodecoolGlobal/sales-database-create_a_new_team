@@ -12,9 +12,6 @@ class Service {
     // new order from new customer
 
     static void addNewOrderToNewCustomer() {
-        String lastname = RandomData.generateLastName();
-        String firstName = RandomData.generateFirstName();
-        int contactNameId = RandomData.getQuery().insertToContactNames(new ContactName(firstName, lastname));
         String line1 = RandomData.generateAddressLine();
         String city = RandomData.generateCity();
         String postalCode = RandomData.generatePostalCode();
@@ -22,23 +19,23 @@ class Service {
         int customerAddressId = RandomData.getQuery().insertToCustomerAddress(new Address(line1, city, postalCode, country));
         String customerName = RandomData.generateCustomerName();
         String phoneNumber = RandomData.generatePhoneNumber();
-        int customerId = RandomData.getQuery().insertIntoCustomers(new Customer(customerName, phoneNumber, customerAddressId, contactNameId));
+        String contactName = RandomData.generateContactName();
+        int customerId = RandomData.getQuery().insertIntoCustomers(new Customer(customerName, phoneNumber, customerAddressId, contactName));
         newOrder(customerId);
     }
 
+    // add new order
+
     static void newOrder(int customerId) {
         int orderStatus = 4; // default: In process
-        OrderDate orderdate = new OrderDate();
-        RandomData.getQuery().insertToOrderDates(orderdate);
-        Order newOrder = new Order(orderdate, orderStatus, customerId);
+        Order newOrder = new Order(orderStatus, customerId);
         int orderNumber = RandomData.getQuery().insertToOrders(newOrder);
-        System.out.println("OrderNumber: " + orderNumber);
         String productCode = RandomData.chooseProductCode();
         double productPrice = RandomData.generateProductPrice();
         int quantity = RandomData.chooseQuantity();
         OrderDetails details = new OrderDetails(orderNumber, productCode, quantity, productPrice);
         RandomData.getQuery().insertToOrderDetails(details);
-        ProductPrice price = new ProductPrice(productCode, orderdate, productPrice);
+        ProductPrice price = new ProductPrice(productCode, newOrder.getDateFromTimeStampAsDate(), productPrice);
         RandomData.getQuery().insertToProductPrices(price);
     }
 
@@ -55,18 +52,15 @@ class Service {
     static void changeCity() {
         int customerId = RandomData.chooseCustomerId();
         String newCity = RandomData.generateCity();
-        System.out.println(customerId);
-        System.out.println(newCity);
         RandomData.getQuery().changeCity(customerId, newCity);
     }
 
-    // change lastname, firstname in contactnames
+    // change contact name in customers
 
     static void changeContactName() {
         int customerId = RandomData.chooseCustomerId();
-        String lastName = RandomData.generateLastName();
-        String firstName = RandomData.generateFirstName();
-        RandomData.getQuery().changeContactName(customerId, lastName, firstName);
+        String name = RandomData.generateContactName();
+        RandomData.getQuery().changeContactName(customerId, name);
     }
 
 }

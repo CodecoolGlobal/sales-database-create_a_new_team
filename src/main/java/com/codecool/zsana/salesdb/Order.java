@@ -1,16 +1,20 @@
 package com.codecool.zsana.salesdb;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+
 class Order {
 
     private int orderNumber;
-    private OrderDate orderDate;
+    private Timestamp timestamp;
     private int orderStatus;
     private int customerId;
 
-    Order(OrderDate orderDate, int orderStatus, int customerId) {
+    Order(int orderStatus, int customerId) {
         this.orderStatus = orderStatus;
         this.customerId = customerId;
-        this.orderDate = orderDate;
+        this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     int getOrderNumber() {
@@ -21,8 +25,8 @@ class Order {
         this.orderNumber = orderNumber;
     }
 
-    OrderDate getOrderDate() {
-        return orderDate;
+    Timestamp getTimestamp() {
+        return this.timestamp;
     }
 
     int getOrderStatus() {
@@ -32,4 +36,27 @@ class Order {
     int getCustomerId() {
         return customerId;
     }
+
+    void setTimestamp(Timestamp stamp) {
+        this.timestamp = stamp;
+    }
+
+    String getDateFromTimestampAsString() {
+        Date date = new Date(this.timestamp.getTime());
+        return String.valueOf(date);
+    }
+
+    java.sql.Date getDateFromTimeStampAsDate() {
+        return new Date(this.timestamp.getTime());
+    }
+
+    String getTimeFromTimeStampAsString() {
+        Time time = new Time(this.timestamp.getTime());
+        return String.valueOf(time);
+    }
+
+    java.sql.Time getTimeFromTimeStampAsTime() {
+        return new Time(this.timestamp.getTime());
+    }
+
 }

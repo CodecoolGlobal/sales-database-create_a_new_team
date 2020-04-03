@@ -21,3 +21,5 @@ Scope of testing: the software of the application
 3. Schemas - research about this topic
 
 Structural / Functional / Non-functional tests
+
+Security

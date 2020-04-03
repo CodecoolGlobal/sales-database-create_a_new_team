@@ -11,6 +11,12 @@ class DatabaseConnection {
 
     DatabaseConnection() {}
 
+    DatabaseConnection(String database, String user, String password) {
+        this.DATABASE = database;
+        this.DB_USER = user;
+        this.DB_PASSWORD = password;
+    }
+
     Connection getConnection() {
         try {
             return DriverManager.getConnection(

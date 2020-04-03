@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 
 class RandomDataTest {
 
-    // See manual tests in TestDocumentations
-
-    // NextDouble we need instead of nextInt!
     @Test
     void generateProductPrice() {
         for (int i = 0; i < 100; i++) {
