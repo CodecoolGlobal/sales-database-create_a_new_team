@@ -106,3 +106,25 @@ BEGIN
 end;
 $$
     LANGUAGE plpgsql;
+
+-- Function to get customer id of the frequent buyers of the last four months
+
+CREATE OR REPLACE FUNCTION frequentBuyers() RETURNS integer[] AS $$
+DECLARE
+    id_and_counter table(id integer, counter integer);
+    frequents integer[];
+    from_date date := date_trunc('month', now() - interval '4 months');
+    now_date date := date_trunc('month', now());
+BEGIN
+    SELECT t.counter INTO frequents FROM
+    (SELECT customer_id, count(g.customer_id) as counter INTO id_and_counter FROM
+        (with a as (SELECT customer_id, date_trunc('month', order_date) as months_
+                    FROM orders WHERE order_date BETWEEN from_date AND now_date)
+         SELECT DISTINCT gen.d, a.customer_id, a.months_
+         FROM (SELECT generate_series(from_date, now_date, '1 month') as d) gen
+                  LEFT JOIN a ON months_ = d) g GROUP BY customer_id) t
+    WHERE t.counter = 4;
+    RETURN frequents;
+END;
+$$
+    LANGUAGE plpgsql;
