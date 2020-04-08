@@ -3,12 +3,12 @@ package com.codecool.zsana.salesdb;
 class ProductPrice {
 
     private String productCode;
-    private OrderDate orderDate;
+    private java.sql.Date date;
     private double price;
 
-    ProductPrice(String productCode, OrderDate orderdate, double price) {
+    ProductPrice(String productCode, java.sql.Date date, double price) {
         this.productCode = productCode;
-        this.orderDate = orderdate;
+        this.date = date;
         this.price = price;
     }
 
@@ -16,8 +16,8 @@ class ProductPrice {
         return productCode;
     }
 
-    OrderDate getOrderDate() {
-        return orderDate;
+    java.sql.Date getDate() {
+        return date;
     }
 
     double getPrice() {

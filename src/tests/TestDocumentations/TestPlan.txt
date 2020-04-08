@@ -1,0 +1,25 @@
+DRAFT
+
+- USED:
+ * https://www.guru99.com/database-testing-interview-questions.html
+
+ * https://www.guru99.com/data-testing.html
+
+ * https://www.softwaretestinghelp.com/database-testing-process/
+
+Scope of testing: the software of the application
+
+1. Requirement tests - TDD: test cases written using the requirements
+
+2. Unit tests - dbUnit to use (https://stackoverflow.com/questions/266370/how-do-i-unit-test-jdbc-code-in-java)
+ - Classes for unit test:
+    * DatabaseConnection
+    * Service
+    * Query
+    * RandomData
+
+3. Schemas - research about this topic
+
+Structural / Functional / Non-functional tests
+
+Security

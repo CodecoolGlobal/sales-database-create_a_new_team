@@ -21,20 +21,32 @@ class RandomData {
         return codes.get(rand.nextInt(codes.size()));
     }
 
+    static int chooseProductLineId() {
+        List<Integer> ids = query.getProductLineIds();
+        return ids.get(rand.nextInt(ids.size()));
+    }
+
+    static String generateProductCode() {
+        List<String> codes = query.getProductCodes();
+        String newCode = getLetterForProductCode() + rand.nextInt(999) + "_" + rand.nextInt(9999);
+        while (codes.contains(newCode)) {
+            newCode = getLetterForProductCode() + rand.nextInt(999) + "_" + rand.nextInt(9999);
+        }
+        return newCode;
+    }
+
     static double generateProductPrice() {
-        return 39 + rand.nextInt((100 - 39) + 1);
+        double price = 39 + (100 - 39) * rand.nextDouble();
+        String p = String.valueOf(price).substring(0, 5);
+        return Double.valueOf(p);
     }
 
     static int chooseQuantity() {
         return 1 + rand.nextInt((4 - 1) + 1);
     }
 
-    static String generateLastName() {
-        return faker.name().lastName();
-    }
-
-    static String generateFirstName() {
-       return faker.name().firstName();
+    static String generateContactName() {
+        return faker.name().lastName() + " " + faker.name().firstName();
     }
 
     static String generateCustomerName() {
@@ -61,8 +73,18 @@ class RandomData {
         return faker.phoneNumber().cellPhone();
     }
 
+    static String generateProductline() {
+        return faker.company().industry();
+    }
+
     static Query getQuery() {
         return query;
+    }
+
+    private static String getLetterForProductCode() {
+        String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+                "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        return letters[rand.nextInt(letters.length)];
     }
 
 }

@@ -1,0 +1,23 @@
+Task descriptions - requirements
+
+ a. Build the normalized database from the given dataset. Save the DDL commands into an SQL file.
+ b. Write a service which generates new records for the dataset without changing the distributions.
+ c. Create a Customer representative table:
+        - name
+        - address
+        - phone number.
+ d. Generate random customer representative data.
+ e. Write a service which inserts new random data, even faulty data.
+    It should be scheduled in cron job which is triggered every 30 minutes.
+ f. Write a service which updates the random customer representative data from time to time.
+ g. You need to track all the changes in the customer representative table - take care that
+    you need to keep the old data as well: e.g. we have to know that who was the company representative at a certain time.
+ h. Provide a report for the sales department of our regular customers (customers who have bought products for 4 consecutive months).
+ g. General requirements:
+        - DDL statements are stored in SQL files
+        - Database objects (table, columns, indices, keys) are properly named
+        - Database is normalized according to 3rd Normal form
+        - Primary keys and foreign keys are properly used
+        - There are proper indices on the tables
+        - Written services can be scheduled via cron job
+        - It's up on you what language you use to create the required services

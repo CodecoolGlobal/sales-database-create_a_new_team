@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS changes;
+
 -- New table for customer-related changes, including address and contact name
 
 CREATE TABLE changes (
@@ -55,49 +56,53 @@ CREATE TRIGGER address_changes
     FOR EACH ROW
     EXECUTE PROCEDURE log_address_changes();
 
--- change the contactnames table, first and last name
+-- change contact name in customers
 
-CREATE OR REPLACE FUNCTION log_first_name_changes()
+CREATE OR REPLACE FUNCTION log_name_changes()
     RETURNS trigger AS
 $BODY$
     BEGIN
-    IF NEW.firstname <> OLD.firstname THEN
+    IF NEW.contact_name <> OLD.contact_name THEN
         INSERT INTO changes
-        VALUES ((SELECT customers.customer_id FROM customers
-                    JOIN contactnames
-                    ON customers.contactname_id = contactnames.contactname_id
-                    WHERE customers.contactname_id = OLD.contactname_id), 'contactnames', 'firstname', OLD.firstname, now()); --choose customer_id
+        VALUES ((SELECT customers.customer_id FROM customers WHERE customer_id = OLD.customer_id), 'customers', 'contact_name', OLD.contact_name, now());
     END IF;
     RETURN NEW;
     END;
 $BODY$
 LANGUAGE PLPGSQL;
 
-CREATE TRIGGER first_name_changes
+CREATE TRIGGER name_changes
     BEFORE UPDATE
-    ON contactnames
+    ON customers
     FOR EACH ROW
-    EXECUTE PROCEDURE log_first_name_changes();
+    EXECUTE PROCEDURE log_name_changes();
 
+-- Function to get order number by quarter year;
 
-CREATE OR REPLACE FUNCTION log_last_name_changes()
-    RETURNS trigger AS
-$BODY$
-    BEGIN
-    IF NEW.lastname <> OLD.lastname THEN
-        INSERT INTO changes
-        VALUES ((SELECT customers.customer_id FROM customers
-                    JOIN contactnames
-                    ON customers.contactname_id = contactnames.contactname_id
-                    WHERE customers.contactname_id = OLD.contactname_id), 'contactnames', 'lastname', OLD.lastname, now()); --choose customer_id
-    END IF;
-    RETURN NEW;
-    END;
-$BODY$
-LANGUAGE PLPGSQL;
+CREATE OR REPLACE FUNCTION getQuarterYear(qy integer) RETURNS TABLE (orderNumber integer)
+AS $$
+BEGIN
+    RETURN QUERY SELECT order_number FROM orders WHERE extract(quarter FROM order_date) = qy;
+end;
+$$
+    LANGUAGE plpgsql;
 
-CREATE TRIGGER last_name_changes
-    BEFORE UPDATE
-    ON contactnames
-    FOR EACH ROW
-    EXECUTE PROCEDURE log_last_name_changes();
+-- Function to get order number by month;
+
+CREATE OR REPLACE FUNCTION getMonth(m integer) RETURNS TABLE (orderNumber integer)
+AS $$
+BEGIN
+    RETURN QUERY SELECT order_number FROM orders WHERE extract(MONTH FROM order_date) = m;
+end;
+$$
+    LANGUAGE plpgsql;
+
+-- Function to get order number by year;
+
+CREATE OR REPLACE FUNCTION getYear(y integer) RETURNS TABLE (orderNumber integer)
+AS $$
+BEGIN
+    RETURN QUERY SELECT order_number FROM orders WHERE extract(YEAR FROM order_date) = y;
+end;
+$$
+    LANGUAGE plpgsql;

@@ -17,6 +17,10 @@ class Query {
         this.dbConnection = new DatabaseConnection();
     }
 
+    Query(String database, String user, String password) {
+        this.dbConnection = new DatabaseConnection(database, user, password);
+    }
+
     Integer getLastOrderNumber() {
         Connection connection = dbConnection.getConnection();
         String query = "SELECT MAX(order_number) FROM orders";
@@ -37,15 +41,16 @@ class Query {
 
     int insertToOrders(Order order) {
         Connection connection = dbConnection.getConnection();
-        String query = "INSERT INTO orders VALUES (?, ?, ?, ?);";
+        String query = "INSERT INTO orders VALUES (?, cast(? AS date), ?, ?, cast(? AS time));";
         PreparedStatement ps = null;
         Integer orderNumber = getLastOrderNumber() + 1;
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, orderNumber);
-            ps.setDate(2, order.getOrderDate().getDate());
+            ps.setTimestamp(2, order.getTimestamp());
             ps.setInt(3, order.getOrderStatus()); // default: In process
             ps.setInt(4, order.getCustomerId());
+            ps.setTimestamp(5, order.getTimestamp());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,27 +58,6 @@ class Query {
             getFinallyClause(ps, connection);
         }
         return orderNumber;
-    }
-
-    void insertToOrderDates(OrderDate orderdate) {
-        Connection connection = dbConnection.getConnection();
-        String query = "INSERT INTO orderdates VALUES (?, cast(? AS quarter_year), ?, ?);";
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setDate(1, orderdate.getDate());
-            ps.setString(2, String.valueOf(orderdate.getQuarterYear().getValue()));
-            ps.setInt(3, orderdate.getMonth());
-            ps.setInt(4, orderdate.getYear());
-            ps.executeUpdate();
-        } catch (PSQLException p) {
-            System.out.println("Orderdates_id already exists.");
-            p.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            getFinallyClause(ps, connection);
-        }
     }
 
     void insertToOrderDetails(OrderDetails orderDetails) {
@@ -123,30 +107,9 @@ class Query {
         return -1;
     }
 
-    int insertToContactNames(ContactName contactName) {
-        Connection connection = dbConnection.getConnection();
-        String query = "INSERT INTO contactnames (lastname, firstname) VALUES (?, ?) RETURNING contactname_id;";
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setString(1, contactName.getLastName());
-            ps.setString(2, contactName.getFirstName());
-            ps.executeQuery();
-            ResultSet result = ps.getResultSet();
-            if (result.next()) {
-                return result.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            getFinallyClause(ps, connection);
-        }
-        return -1;
-    }
-
     int insertIntoCustomers(Customer customer) {
         Connection connection = dbConnection.getConnection();
-        String query = "INSERT INTO customers (customer_name, phone_number, address_id, contactname_id)" +
+        String query = "INSERT INTO customers (customer_name, phone_number, address_id, contact_name)" +
                 " VALUES (?, ?, ?, ?) RETURNING customer_id;";
         PreparedStatement ps = null;
         try {
@@ -154,7 +117,7 @@ class Query {
             ps.setString(1, customer.getCustomerName());
             ps.setString(2, customer.getPhoneNumber());
             ps.setInt(3, customer.getAddressId());
-            ps.setInt(4, customer.getContactNameId());
+            ps.setString(4, customer.getContactName());
             ps.executeQuery();
             ResultSet result = ps.getResultSet();
             if (result.next()) {
@@ -175,8 +138,40 @@ class Query {
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, price.getProductCode());
-            ps.setDate(2, price.getOrderDate().getDate());
+            ps.setDate(2, price.getDate());
             ps.setDouble(3, price.getPrice());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            getFinallyClause(ps, connection);
+        }
+    }
+
+    void addNewProductLine(String productLine) {
+        Connection connection = dbConnection.getConnection();
+        PreparedStatement ps = null;
+        String query = "INSERT INTO productline (productline_name) VALUES (?);";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, productLine);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            getFinallyClause(ps, connection);
+        }
+    }
+
+    void addNewProduct(Product product) {
+        Connection connection = dbConnection.getConnection();
+        PreparedStatement ps = null;
+        String query = "INSERT INTO products VALUES (?, ?, ?);";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, product.getProductCode());
+            ps.setInt(2, product.getMsrp());
+            ps.setInt(3, product.getProductLineId());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -222,19 +217,14 @@ class Query {
         }
     }
 
-    void changeContactName(int customerId, String newLastName, String newFirstName) {
+    void changeContactName(int customerId, String contactName) {
         Connection connection = dbConnection.getConnection();
         PreparedStatement ps = null;
-        String query = "UPDATE contactnames SET lastname = ?, firstname = ?\n" +
-                "WHERE contactname_id = (SELECT customers.contactname_id FROM customers\n" +
-                "                        JOIN contactnames\n" +
-                "                        ON customers.contactname_id = contactnames.contactname_id\n" +
-                "                        WHERE customer_id = ?);";
+        String query = "UPDATE customers SET contact_name = ? WHERE customer_id = ?;";
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, newLastName);
-            ps.setString(2, newFirstName);
-            ps.setInt(3, customerId);
+            ps.setString(1, contactName);
+            ps.setInt(2, customerId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -281,6 +271,26 @@ class Query {
             getFinallyClause(ps, connection);
         }
         return codes;
+    }
+
+    List<Integer> getProductLineIds() {
+        Connection connection = dbConnection.getConnection();
+        PreparedStatement ps = null;
+        String query = "SELECT productline_id FROM productline;";
+        List<Integer> ids = new ArrayList<>();
+        try {
+            ps = connection.prepareStatement(query);
+            ps.executeQuery();
+            ResultSet result = ps.getResultSet();
+            while (result.next()) {
+                ids.add(result.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            getFinallyClause(ps, connection);
+        }
+        return ids;
     }
 
     private void getFinallyClause(PreparedStatement ps, Connection connection) {
