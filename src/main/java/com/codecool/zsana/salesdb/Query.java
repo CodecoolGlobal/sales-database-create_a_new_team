@@ -148,6 +148,38 @@ class Query {
         }
     }
 
+    void addNewProductLine(String productLine) {
+        Connection connection = dbConnection.getConnection();
+        PreparedStatement ps = null;
+        String query = "INSERT INTO productline (productline_name) VALUES (?);";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, productLine);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            getFinallyClause(ps, connection);
+        }
+    }
+
+    void addNewProduct(Product product) {
+        Connection connection = dbConnection.getConnection();
+        PreparedStatement ps = null;
+        String query = "INSERT INTO products VALUES (?, ?, ?);";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, product.getProductCode());
+            ps.setInt(2, product.getMsrp());
+            ps.setInt(3, product.getProductLineId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            getFinallyClause(ps, connection);
+        }
+    }
+
     void changePhoneNumber(int id, String phoneNumber) {
         Connection connection = dbConnection.getConnection();
         PreparedStatement ps = null;
@@ -239,6 +271,26 @@ class Query {
             getFinallyClause(ps, connection);
         }
         return codes;
+    }
+
+    List<Integer> getProductLineIds() {
+        Connection connection = dbConnection.getConnection();
+        PreparedStatement ps = null;
+        String query = "SELECT productline_id FROM productline;";
+        List<Integer> ids = new ArrayList<>();
+        try {
+            ps = connection.prepareStatement(query);
+            ps.executeQuery();
+            ResultSet result = ps.getResultSet();
+            while (result.next()) {
+                ids.add(result.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            getFinallyClause(ps, connection);
+        }
+        return ids;
     }
 
     private void getFinallyClause(PreparedStatement ps, Connection connection) {

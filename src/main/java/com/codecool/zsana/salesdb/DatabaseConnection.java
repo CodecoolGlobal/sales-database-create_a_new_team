@@ -6,8 +6,8 @@ import java.lang.*;
 class DatabaseConnection {
 
     private String DATABASE = "jdbc:postgresql://localhost:5432/normalized_sales";
-    private String DB_USER = System.getenv("DB_USER");
-    private String DB_PASSWORD = System.getenv("DB_PASSWORD");
+    private String DB_USER = System.getProperty("DB_USER");
+    private String DB_PASSWORD = System.getProperty("DB_PASSWORD");
 
     DatabaseConnection() {}
 

@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS order_status;
 
 CREATE TABLE productline (
     productline_id SERIAL PRIMARY KEY,
-    productline_name varchar(255)
+    productline_name varchar(255) UNIQUE
 );
 
 CREATE TABLE dealsize (

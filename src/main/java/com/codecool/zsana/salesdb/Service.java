@@ -39,6 +39,22 @@ class Service {
         RandomData.getQuery().insertToProductPrices(price);
     }
 
+    // add new product line
+
+    static void addNewProductLine() {
+        String productLine = RandomData.generateProductline();
+        RandomData.getQuery().addNewProductLine(productLine);
+    }
+
+    // add new product
+
+    static void addNewProduct() {
+        String productCode = RandomData.generateProductCode();
+        int price = (int) RandomData.generateProductPrice();
+        int productLineId = RandomData.chooseProductLineId();
+        RandomData.getQuery().addNewProduct(new Product(productCode, price, productLineId));
+    }
+
     // choose random id, and change its phone
 
     static void changePhoneNumber() {
